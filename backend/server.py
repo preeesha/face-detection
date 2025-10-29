@@ -32,7 +32,7 @@ async def receive_image(data: ImageData):
         print(f"\n{'='*50}")
         print(f"📸 Received image from: {data.name} (ID: {data.id})")
         print(f"🔢 Image number: {data.image_number}")
-        print(f"📊 Image data length: {len(data.image)} characters")
+        print(f"📊 Image data length: {len(data.image)}")
 
         # Create folder for this specific person (based on ID)
         person_folder = os.path.join("dataset", data.id)
@@ -75,30 +75,8 @@ async def receive_image(data: ImageData):
 async def root():
     return {"message": "Face Detection Training Data Server Running 🚀"}
 
-@app.get("/stats")
-async def get_stats():
-    """Get statistics about received images"""
-    if not os.path.exists("dataset"):
-        return {"total_images": 0, "people": []}
-
-    people = {}
-    for person_id in os.listdir("dataset"):
-        person_path = os.path.join("dataset", person_id)
-        if os.path.isdir(person_path):
-            image_files = [f for f in os.listdir(person_path) if f.endswith(".jpg")]
-            people[person_id] = len(image_files)
-
-    total_images = sum(people.values())
-    return {
-        "total_images": total_images,
-        "people": people,
-        "total_folders": len(people),
-    }
 
 if __name__ == "__main__":
     import uvicorn
     print("🚀 Starting Face Detection Training Server...")
-    print("📁 Images will be saved in 'dataset/<id>' folders")
-    print("🌐 Server running at: http://localhost:8000")
-    print("📊 View stats at: http://localhost:8000/stats")
     uvicorn.run(app, host="0.0.0.0", port=8000)
