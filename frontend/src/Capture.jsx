@@ -1,15 +1,14 @@
 import { useState, useRef, useEffect } from "react";
-import { v4 as uuidv4 } from 'uuid';
-
-
 
 function Capture() {
   const [name, setName] = useState("");
   const[id,setId]=useState("");
+
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [isVideoReady, setIsVideoReady] = useState(false);
   const [capturedCount, setCapturedCount] = useState(0);
   const [isCapturing, setIsCapturing] = useState(false);
+
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -56,6 +55,7 @@ function Capture() {
       });
 
       const data = await res.json();
+      console.log(data)
       setCapturedCount(prev => prev + 1);
       console.log(`Image ${capturedCount + 1} captured for ${name}`);
     } catch (err) {
@@ -71,6 +71,8 @@ function Capture() {
     if (capturedCount > 0) {
       alert(`Training complete! ${capturedCount} images captured for ${name}`);
     }
+    setName("")
+    setId("")
   };
 
   return (
